@@ -11,7 +11,7 @@ const ManageDoctors = () => {
   const [doctors, setDoctors] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
-  
+
   // Modals
   const [showAddModal, setShowAddModal] = useState(false);
   const [generatedCreds, setGeneratedCreds] = useState(null);
@@ -39,14 +39,14 @@ const ManageDoctors = () => {
     try {
       const res = await api.post('/doctors', data);
       setDoctors((prev) => [...prev, res.data]);
-      
+
       // Store credentials to show Admin
       setGeneratedCreds({
         id: res.data.id,
         password: res.data.generatedPassword,
         name: res.data.name
       });
-      
+
       setShowAddModal(false);
       reset();
       toast.success(`Registered Dr. ${data.name}!`);
@@ -87,7 +87,7 @@ const ManageDoctors = () => {
       <Navbar roleTitle="Admin Hub" />
       <div className="flex">
         <Sidebar role="admin" />
-        
+
         {/* Main Workspace */}
         <main className="flex-1 p-6 md:p-8 space-y-6 overflow-y-auto max-h-[calc(100vh-73px)]">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center space-y-4 md:space-y-0">
@@ -95,7 +95,7 @@ const ManageDoctors = () => {
               <h1 className="text-3xl font-extrabold text-slate-900 dark:text-white">Doctor Management</h1>
               <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">Register physicians, modify clinical assignments, and manage medical staff details.</p>
             </div>
-            
+
             <button
               onClick={() => setShowAddModal(true)}
               className="flex items-center space-x-2 px-4 py-2.5 bg-rosegold-500 text-white rounded-xl text-xs font-semibold hover:glow-rosegold hover:bg-rosegold-600 transition-all shadow-md"
@@ -142,7 +142,7 @@ const ManageDoctors = () => {
                   onClick={() => {
                     setGeneratedCreds({
                       id: doc.id,
-                      password: doc.plainPassword || 'Hidden (Old Record)',
+                      password: doc.plainPassword || doc.generatedPassword || 'Hidden (Old Record)',
                       name: doc.name
                     });
                   }}
@@ -278,7 +278,7 @@ const ManageDoctors = () => {
               <div className="w-14 h-14 bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 rounded-full flex items-center justify-center mx-auto shadow-inner">
                 <Check className="w-8 h-8" />
               </div>
-              
+
               <div className="space-y-2">
                 <h3 className="font-extrabold text-slate-900 dark:text-white text-base">Physician Account Generated</h3>
                 <p className="text-xs text-slate-500 dark:text-slate-400">Provide the credentials below to Dr. {generatedCreds.name.split(' ').pop()} for logging into their Physician Portal.</p>
@@ -288,7 +288,7 @@ const ManageDoctors = () => {
                 <p><span className="text-slate-450">Login Link:</span> VK Portal</p>
                 <p><span className="text-slate-450">Doctor ID:</span> <strong className="text-rosegold-600 dark:text-rosegold-400">{generatedCreds.id}</strong></p>
                 <p><span className="text-slate-450">Password:</span> <strong className="text-rosegold-600 dark:text-rosegold-400">{generatedCreds.password}</strong></p>
-                
+
                 <button
                   onClick={copyToClipboard}
                   className="absolute right-3 top-3 p-1.5 bg-white dark:bg-slate-900 border border-slate-250 dark:border-slate-800 rounded-lg hover:text-rosegold-500 transition-colors"
@@ -327,7 +327,7 @@ const ManageDoctors = () => {
               <div className="w-12 h-12 bg-red-500/10 text-red-500 border border-red-500/20 rounded-full flex items-center justify-center mx-auto shadow-inner">
                 <Trash2 className="w-6 h-6" />
               </div>
-              
+
               <div className="text-center space-y-2">
                 <h3 className="font-extrabold text-slate-900 dark:text-white text-base">Remove Physician Record?</h3>
                 <p className="text-xs text-slate-500 dark:text-slate-400">You are about to delete doctor account {deleteDoctorId} from the database. This action is irreversible.</p>
