@@ -8,7 +8,7 @@ export const SocketProvider = ({ children }) => {
 
   useEffect(() => {
     // Connect to Backend Socket.IO Server
-    const socketInstance = io('http://localhost:5000');
+    const socketInstance = io(process.env.REACT_APP_API_URL ? process.env.REACT_APP_API_URL.replace('/api', '') : 'https://hospital-management-3-4uml.onrender.com');
     setSocket(socketInstance);
 
     socketInstance.on('connect', () => {
