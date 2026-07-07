@@ -10,7 +10,7 @@ const Login = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const { login, user } = useAuth();
-  
+
   // Set default active tab role from URL query param, default to attender
   const initialRole = searchParams.get('role') || 'attender';
   const [activeRole, setActiveRole] = useState(initialRole);
@@ -118,11 +118,10 @@ const Login = () => {
                 setActiveRole(r.id);
                 reset();
               }}
-              className={`flex-1 py-4 flex items-center justify-center space-x-2 text-xs font-semibold uppercase tracking-wider transition-all duration-300 ${
-                activeRole === r.id
+              className={`flex-1 py-4 flex items-center justify-center space-x-2 text-xs font-semibold uppercase tracking-wider transition-all duration-300 ${activeRole === r.id
                   ? 'border-b-2 border-rosegold-500 text-rosegold-600 dark:text-rosegold-400 bg-white/50 dark:bg-slate-900/40'
                   : 'text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-350'
-              }`}
+                }`}
             >
               {r.icon}
               <span className="hidden sm:inline">{r.label}</span>
@@ -157,7 +156,7 @@ const Login = () => {
                     <input
                       type="text"
                       className="w-full bg-white/50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-xl py-2.5 pl-10 pr-4 text-sm focus:outline-none focus:border-rosegold-400 transition-colors"
-                      placeholder="e.g. vasanthadmin123"
+                      placeholder="Username"
                       {...register('username', { required: 'Username is required' })}
                     />
                   </div>
@@ -251,7 +250,7 @@ const Login = () => {
                   Or authorized identity
                 </span>
               </div>
-              
+
               <button
                 type="button"
                 onClick={handleGoogleLogin}
