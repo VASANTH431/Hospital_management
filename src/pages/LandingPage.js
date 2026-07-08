@@ -11,8 +11,8 @@ const LandingPage = () => {
   useEffect(() => {
     let index = 0;
     const interval = setInterval(() => {
-      setTypedText((prev) => prev + fullText.charAt(index));
       index++;
+      setTypedText(fullText.substring(0, index));
       if (index >= fullText.length) {
         clearInterval(interval);
       }
