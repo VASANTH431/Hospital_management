@@ -121,7 +121,7 @@ const LandingPage = () => {
             >
               {/* Highlight background element on hover */}
               <div className="absolute inset-0 bg-gradient-to-r from-rosegold-400/5 to-rosegold-600/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-              
+
               <div className="flex justify-between items-start mb-4">
                 <div className="p-3 bg-white dark:bg-slate-900 rounded-xl shadow-inner border border-rosegold-100/20">
                   {portal.icon}
@@ -134,7 +134,7 @@ const LandingPage = () => {
               <h3 className="text-xl font-bold text-slate-900 dark:text-white group-hover:text-rosegold-500 transition-colors duration-300">
                 {portal.title}
               </h3>
-              
+
               <p className="mt-3 text-sm text-slate-500 dark:text-slate-400 leading-relaxed">
                 {portal.description}
               </p>
