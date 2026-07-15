@@ -150,7 +150,7 @@ const LandingPage = () => {
 
       {/* Footer */}
       <footer className="max-w-7xl mx-auto w-full text-center text-xs text-slate-400 dark:text-slate-600 z-10 border-t border-slate-200/40 dark:border-slate-800/40 pt-6 mt-12">
-        <p>&copy; 2026 VK Hospital Care Group. All rights reserved. Designed with Rose Gold clinical design tokens.</p>
+        <p>&copy; 2026 VK Hospital Care Group. All rights reserved. Designed with Rose Gold clinical design Club.</p>
       </footer>
     </div>
   );
