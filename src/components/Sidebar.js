@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { LayoutDashboard, Users, Bed, Activity, Megaphone, Stethoscope, UserCog } from 'lucide-react';
+import { LayoutDashboard, Users, Bed, Stethoscope, UserCog } from 'lucide-react';
 
 const Sidebar = ({ role }) => {
   const adminLinks = [
@@ -30,10 +30,9 @@ const Sidebar = ({ role }) => {
                 key={idx}
                 to={link.path}
                 className={({ isActive }) =>
-                  `flex items-center space-x-3.5 px-4 py-3 rounded-xl text-sm font-semibold tracking-wide transition-all duration-300 ${
-                    isActive
-                      ? 'bg-rosegold-500 text-white shadow-md glow-rosegold'
-                      : 'text-slate-500 dark:text-slate-400 hover:text-rosegold-500 hover:bg-rosegold-50/50 dark:hover:bg-rosegold-950/10'
+                  `flex items-center space-x-3.5 px-4 py-3 rounded-xl text-sm font-semibold tracking-wide transition-all duration-300 ${isActive
+                    ? 'bg-rosegold-500 text-white shadow-md glow-rosegold'
+                    : 'text-slate-500 dark:text-slate-400 hover:text-rosegold-500 hover:bg-rosegold-50/50 dark:hover:bg-rosegold-950/10'
                   }`
                 }
               >

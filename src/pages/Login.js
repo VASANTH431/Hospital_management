@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form';
 import { toast } from 'react-hot-toast';
 import { motion } from 'framer-motion';
 import { useAuth } from '../context/AuthContext';
-import { Heart, Shield, Stethoscope, User, Lock, Mail, Key } from 'lucide-react';
+import { Heart, Shield, Stethoscope, User, Lock, Key } from 'lucide-react';
 
 const Login = () => {
   const [searchParams] = useSearchParams();
@@ -119,8 +119,8 @@ const Login = () => {
                 reset();
               }}
               className={`flex-1 py-4 flex items-center justify-center space-x-2 text-xs font-semibold uppercase tracking-wider transition-all duration-300 ${activeRole === r.id
-                  ? 'border-b-2 border-rosegold-500 text-rosegold-600 dark:text-rosegold-400 bg-white/50 dark:bg-slate-900/40'
-                  : 'text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-350'
+                ? 'border-b-2 border-rosegold-500 text-rosegold-600 dark:text-rosegold-400 bg-white/50 dark:bg-slate-900/40'
+                : 'text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-350'
                 }`}
             >
               {r.icon}

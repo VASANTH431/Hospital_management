@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import api from '../../utils/api';
 import Navbar from '../../components/Navbar';
 import Sidebar from '../../components/Sidebar';
-import { Plus, Search, Trash2, Edit, X, Copy, Check, Info } from 'lucide-react';
+import { Plus, Search, Trash2, X, Copy, Check, Info } from 'lucide-react';
 
 const ManageDoctors = () => {
   const [doctors, setDoctors] = useState([]);

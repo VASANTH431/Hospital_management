@@ -8,13 +8,9 @@ import Sidebar from '../../components/Sidebar';
 import {
   Users,
   Bed,
-  Activity,
   UserCheck,
-  ClipboardList,
-  AlertTriangle,
   X,
   Layers,
-  Sparkles,
   RefreshCw,
   BellRing,
   Stethoscope
@@ -29,10 +25,7 @@ import {
   ResponsiveContainer,
   PieChart,
   Pie,
-  Cell,
-  LineChart,
-  Line,
-  Legend
+  Cell
 } from 'recharts';
 
 const COLORS = ['#DEA193', '#F2D4CD', '#CD8576', '#B0695B', '#8E5044', '#69382F', '#4A231C', '#A78BFA'];
@@ -147,10 +140,10 @@ const AdminDashboard = () => {
       <Navbar roleTitle="Admin Hub" />
       <div className="flex">
         <Sidebar role="admin" />
-        
+
         {/* Main Content Pane */}
         <main className="flex-1 p-6 md:p-8 space-y-8 overflow-y-auto max-h-[calc(100vh-73px)]">
-          
+
           {/* Header Row */}
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center space-y-4 md:space-y-0">
             <div>
@@ -159,7 +152,7 @@ const AdminDashboard = () => {
                 Real-time control grid & performance telemetry for VK Hospital.
               </p>
             </div>
-            
+
             <button
               onClick={fetchDashboardData}
               className="flex items-center space-x-2 px-4 py-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-xs font-semibold text-slate-650 dark:text-slate-350 hover:bg-slate-50 dark:hover:bg-slate-850 hover:text-rosegold-500 transition-all shadow-sm"
@@ -204,7 +197,7 @@ const AdminDashboard = () => {
 
           {/* Interactive Sections: Doctors & Floors */}
           <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
-            
+
             {/* Clickable Floor Cards */}
             <div className="glass-card p-6 rounded-2xl border border-white/20 shadow-sm space-y-4">
               <div className="flex items-center space-x-2 border-b border-slate-200/50 dark:border-slate-800/40 pb-3">
@@ -214,7 +207,7 @@ const AdminDashboard = () => {
               <p className="text-xs text-slate-500 dark:text-slate-400">
                 Click any floor card below to expand the live bed allocation grid.
               </p>
-              
+
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 {analytics.floorOccupancy.map((f, idx) => (
                   <motion.div
@@ -250,7 +243,7 @@ const AdminDashboard = () => {
               <p className="text-xs text-slate-500 dark:text-slate-400">
                 Click a physician card to inspect the patient records assigned to their care.
               </p>
-              
+
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-[220px] overflow-y-auto pr-2">
                 {doctorsWorkload.map((doc, idx) => (
                   <motion.div
@@ -275,7 +268,7 @@ const AdminDashboard = () => {
 
           {/* Charts Row */}
           <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
-            
+
             {/* Chart 1: Floor Bed Occupancy rates */}
             <div className="xl:col-span-2 glass-card p-6 rounded-2xl border border-white/20 shadow-sm space-y-4">
               <h3 className="font-bold text-slate-900 dark:text-white text-sm">Bed Allocation by Floor</h3>
@@ -339,7 +332,7 @@ const AdminDashboard = () => {
                 Live Feed
               </span>
             </div>
-            
+
             <div className="space-y-3 max-h-[300px] overflow-y-auto pr-2">
               {logs.length === 0 ? (
                 <div className="text-center py-8 text-xs text-slate-450">No activity recorded today.</div>
@@ -349,12 +342,11 @@ const AdminDashboard = () => {
                     key={idx}
                     className="p-3 bg-white/30 dark:bg-slate-900/30 rounded-xl border border-slate-200/30 dark:border-slate-800/30 flex items-start space-x-3 text-xs"
                   >
-                    <span className={`p-1.5 rounded-lg border font-bold text-[9px] uppercase tracking-wide shrink-0 ${
-                      log.type === 'Admission' ? 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20' :
-                      log.type === 'Discharge' ? 'bg-indigo-500/10 text-indigo-500 border-indigo-500/20' :
-                      log.type === 'Bed_Update' ? 'bg-amber-500/10 text-amber-500 border-amber-500/20' :
-                      'bg-slate-500/10 text-slate-500 border-slate-500/20'
-                    }`}>
+                    <span className={`p-1.5 rounded-lg border font-bold text-[9px] uppercase tracking-wide shrink-0 ${log.type === 'Admission' ? 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20' :
+                        log.type === 'Discharge' ? 'bg-indigo-500/10 text-indigo-500 border-indigo-500/20' :
+                          log.type === 'Bed_Update' ? 'bg-amber-500/10 text-amber-500 border-amber-500/20' :
+                            'bg-slate-500/10 text-slate-500 border-slate-500/20'
+                      }`}>
                       {log.type.split('_')[0]}
                     </span>
                     <div className="flex-1 min-w-0">
@@ -485,7 +477,7 @@ const AdminDashboard = () => {
                               {bed.status}
                             </span>
                           </div>
-                          
+
                           <div className="pt-2 text-left space-y-1">
                             <span className="text-[10px] text-slate-450 dark:text-slate-500 block truncate">Ward: {bed.ward}</span>
                             {bed.patientId && (

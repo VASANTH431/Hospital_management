@@ -8,19 +8,14 @@ import { useSocket } from '../../context/SocketContext';
 import Navbar from '../../components/Navbar';
 import Sidebar from '../../components/Sidebar';
 import {
-  Heart,
   UserPlus,
   Search,
-  CheckCircle,
   X,
-  Calendar,
   Layers,
   Activity,
   Bed,
   FileText,
-  UserCheck,
-  TrendingUp,
-  MapPin
+  TrendingUp
 } from 'lucide-react';
 
 const DoctorDashboard = () => {
@@ -28,14 +23,14 @@ const DoctorDashboard = () => {
   const socket = useSocket();
   const [patients, setPatients] = useState([]);
   const [beds, setBeds] = useState([]);
-  const [loading, setLoading] = useState(true);
+
   const [searchQuery, setSearchQuery] = useState('');
-  
+
   // Modals
   const [showAdmitModal, setShowAdmitModal] = useState(false);
   const [showDetailsPatient, setShowDetailsPatient] = useState(null);
   const [showEditProgressId, setShowEditProgressId] = useState(null);
-  
+
   // Progress edit range value
   const [progressVal, setProgressVal] = useState(50);
 
@@ -48,15 +43,13 @@ const DoctorDashboard = () => {
         api.get('/patients'),
         api.get('/beds')
       ]);
-      
+
       // Filter patients assigned to this doctor
       const myPatients = patientsRes.data.filter((p) => p.doctorId === user.id);
       setPatients(myPatients);
       setBeds(bedsRes.data);
     } catch (error) {
       toast.error('Failed to load clinical telemetry');
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -64,6 +57,7 @@ const DoctorDashboard = () => {
     if (user) {
       fetchData();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
   // Sync real-time socket events
@@ -102,7 +96,7 @@ const DoctorDashboard = () => {
       // Inject current doctor ID
       data.doctorId = user.id;
       const res = await api.post('/patients', data);
-      
+
       setPatients((prev) => [res.data, ...prev]);
       setShowAdmitModal(false);
       reset();
@@ -219,7 +213,7 @@ const DoctorDashboard = () => {
           {/* Patients Listing */}
           <div className="glass-card rounded-2xl border border-white/20 p-6 shadow-sm">
             <h3 className="font-bold text-slate-900 dark:text-white text-sm mb-4">My Assigned Patients</h3>
-            
+
             {filteredPatients.length === 0 ? (
               <div className="text-center py-16 text-slate-450 space-y-2">
                 <FileText className="w-10 h-10 mx-auto text-slate-350" />
@@ -241,9 +235,8 @@ const DoctorDashboard = () => {
                           <h4 className="text-base font-extrabold text-slate-900 dark:text-white mt-1.5">{pat.name}</h4>
                           <p className="text-xs text-slate-500 dark:text-slate-400 font-semibold">{pat.age} Yrs • {pat.gender}</p>
                         </div>
-                        <span className={`px-2 py-0.5 rounded text-[9px] font-bold uppercase ${
-                          pat.status === 'admitted' ? 'bg-rosegold-500/10 text-rosegold-500' : 'bg-slate-500/10 text-slate-500'
-                        }`}>
+                        <span className={`px-2 py-0.5 rounded text-[9px] font-bold uppercase ${pat.status === 'admitted' ? 'bg-rosegold-500/10 text-rosegold-500' : 'bg-slate-500/10 text-slate-500'
+                          }`}>
                           {pat.status}
                         </span>
                       </div>
@@ -325,7 +318,7 @@ const DoctorDashboard = () => {
               </div>
 
               <form onSubmit={handleSubmit(onAdmitSubmit)} className="p-6 overflow-y-auto flex-1 space-y-6">
-                
+
                 {/* 1. Core Demographics */}
                 <div className="space-y-4">
                   <h4 className="text-xs font-bold text-rosegold-650 uppercase tracking-wide">1. Demographics & Contact</h4>

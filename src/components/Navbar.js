@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { Sun, Moon, LogOut, Heart, Bell } from 'lucide-react';
+import { Sun, Moon, LogOut, Heart } from 'lucide-react';
 
 const Navbar = ({ roleTitle }) => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
-  
+
   // Dark/Light Mode state
   const [darkMode, setDarkMode] = useState(() => {
-    return localStorage.getItem('vk_theme') === 'dark' || 
+    return localStorage.getItem('vk_theme') === 'dark' ||
       (!localStorage.getItem('vk_theme') && window.matchMedia('(pre-matches-scheme: dark)').matches);
   });
 

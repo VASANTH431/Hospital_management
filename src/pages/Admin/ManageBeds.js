@@ -5,7 +5,7 @@ import api from '../../utils/api';
 import { useSocket } from '../../context/SocketContext';
 import Navbar from '../../components/Navbar';
 import Sidebar from '../../components/Sidebar';
-import { RefreshCw, Bed, Layers, CheckCircle, Info } from 'lucide-react';
+import { RefreshCw, Bed, Info } from 'lucide-react';
 
 const ManageBeds = () => {
   const socket = useSocket();
@@ -31,7 +31,7 @@ const ManageBeds = () => {
   // Sync WebSocket updates
   useEffect(() => {
     if (!socket) return;
-    
+
     socket.on('bed_update', (updatedBed) => {
       setBeds((prev) => prev.map((b) => b.id === updatedBed.id ? updatedBed : b));
     });
@@ -54,8 +54,8 @@ const ManageBeds = () => {
 
   const floors = ['All', 'Ground', 'First', 'Second', 'Third', 'ICU', 'Emergency', 'VIP', 'General Ward'];
 
-  const filteredBeds = selectedFloor === 'All' 
-    ? beds 
+  const filteredBeds = selectedFloor === 'All'
+    ? beds
     : beds.filter((b) => b.floor === selectedFloor);
 
   const getStatusStyle = (status) => {
@@ -74,14 +74,14 @@ const ManageBeds = () => {
       <Navbar roleTitle="Admin Hub" />
       <div className="flex">
         <Sidebar role="admin" />
-        
+
         <main className="flex-1 p-6 md:p-8 space-y-6 overflow-y-auto max-h-[calc(100vh-73px)]">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center space-y-4 md:space-y-0">
             <div>
               <h1 className="text-3xl font-extrabold text-slate-900 dark:text-white">Bed Capacity Control Grid</h1>
               <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">Audit clinical floor grids, modify bed statuses manually, and manage cleaning cycles.</p>
             </div>
-            
+
             <button
               onClick={fetchBeds}
               className="flex items-center space-x-2 px-4 py-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-xs font-semibold hover:bg-slate-50 dark:hover:bg-slate-850 hover:text-rosegold-500 transition-all shadow-sm"
@@ -97,11 +97,10 @@ const ManageBeds = () => {
               <button
                 key={floor}
                 onClick={() => setSelectedFloor(floor)}
-                className={`px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-all ${
-                  selectedFloor === floor
+                className={`px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-all ${selectedFloor === floor
                     ? 'bg-rosegold-500 text-white shadow-sm'
                     : 'text-slate-500 hover:text-rosegold-500'
-                }`}
+                  }`}
               >
                 {floor}
               </button>

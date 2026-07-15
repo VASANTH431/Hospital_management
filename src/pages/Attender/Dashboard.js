@@ -6,16 +6,10 @@ import { useSocket } from '../../context/SocketContext';
 import Navbar from '../../components/Navbar';
 import {
   Calendar,
-  Heart,
   Stethoscope,
-  Activity,
   Bed,
   FileText,
-  DollarSign,
-  Info,
-  Clock,
-  ClipboardList,
-  AlertCircle
+  DollarSign
 } from 'lucide-react';
 
 const AttenderDashboard = () => {
@@ -46,6 +40,7 @@ const AttenderDashboard = () => {
     if (user) {
       fetchPatientInfo();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
   // Real-time synchronization
@@ -90,7 +85,7 @@ const AttenderDashboard = () => {
 
       {/* Main Container */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8 space-y-8">
-        
+
         {/* Patient Status Banner */}
         <div className="glass-card rounded-3xl border border-white/20 p-6 md:p-8 shadow-md bg-gradient-to-r from-rosegold-100/30 via-rosegold-200/10 to-transparent flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
           <div className="space-y-3">
@@ -109,14 +104,14 @@ const AttenderDashboard = () => {
               <span>Recovery Rate</span>
               <span className="text-rosegold-550">{patientData.recoveryProgress}%</span>
             </div>
-            
+
             <div className="w-full bg-slate-200 dark:bg-slate-800 h-2.5 rounded-full overflow-hidden">
               <div
                 className="bg-rosegold-500 h-full rounded-full transition-all duration-1000 ease-out"
                 style={{ width: `${patientData.recoveryProgress}%` }}
               />
             </div>
-            
+
             <span className="text-[10px] text-slate-450 dark:text-slate-500 font-medium block">
               Estimated Discharge: {new Date(patientData.estimatedDischargeDate).toLocaleDateString()}
             </span>
@@ -125,17 +120,17 @@ const AttenderDashboard = () => {
 
         {/* 2-Column Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          
+
           {/* Column 1: Medical & Treatment details */}
           <div className="lg:col-span-2 space-y-6">
-            
+
             {/* Core Treatment Card */}
             <div className="glass-card rounded-2xl p-6 border border-white/20 shadow-sm space-y-5">
               <div className="flex items-center space-x-2 border-b border-slate-200/50 dark:border-slate-800/40 pb-3">
                 <FileText className="w-5 h-5 text-rosegold-500" />
                 <h3 className="font-bold text-slate-900 dark:text-white text-sm">Treatment Log Card</h3>
               </div>
-              
+
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs text-slate-650 dark:text-slate-400">
                 <div className="space-y-1">
                   <span className="text-[10px] text-slate-400 block uppercase">Diagnosed Condition</span>
@@ -177,7 +172,7 @@ const AttenderDashboard = () => {
                 <Calendar className="w-5 h-5 text-rosegold-500" />
                 <h3 className="font-bold text-slate-900 dark:text-white text-sm">Timelines & Schedules</h3>
               </div>
-              
+
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-center">
                 <div className="p-4 bg-white/40 dark:bg-slate-900/40 border border-slate-200 dark:border-slate-800 rounded-xl space-y-1">
                   <span className="text-[9px] text-slate-450 dark:text-slate-500 uppercase font-semibold">Admitted On</span>
@@ -185,7 +180,7 @@ const AttenderDashboard = () => {
                     {new Date(patientData.admissionDate).toLocaleDateString()}
                   </span>
                 </div>
-                
+
                 <div className="p-4 bg-white/40 dark:bg-slate-900/40 border border-slate-200 dark:border-slate-800 rounded-xl space-y-1">
                   <span className="text-[9px] text-slate-450 dark:text-slate-500 uppercase font-semibold">Estimated Discharge</span>
                   <span className="text-xs font-bold text-slate-800 dark:text-white block">
@@ -206,7 +201,7 @@ const AttenderDashboard = () => {
 
           {/* Column 2: Clinical staff, Bed telemetry, Billing, Notices */}
           <div className="space-y-6">
-            
+
             {/* Primary Physician Card */}
             <div className="glass-card rounded-2xl p-5 border border-white/20 shadow-sm space-y-4">
               <span className="text-[9px] font-bold text-slate-400 dark:text-slate-550 uppercase tracking-wider block">Primary Physician</span>
@@ -219,7 +214,7 @@ const AttenderDashboard = () => {
                   <p className="text-[10px] text-rosegold-600 dark:text-rosegold-400 font-semibold">{doctorData?.specialization}</p>
                 </div>
               </div>
-              
+
               <div className="border-t border-slate-100 dark:border-slate-850 pt-3 text-[10px] text-slate-500 space-y-1 font-medium">
                 <p>Email: {doctorData?.email}</p>
                 <p>Phone: {doctorData?.phone}</p>
@@ -251,16 +246,15 @@ const AttenderDashboard = () => {
                   <DollarSign className="w-4 h-4 text-slate-400" />
                   <span className="text-xs font-bold text-slate-850 dark:text-white">Financial Status</span>
                 </div>
-                
-                <span className={`px-2.5 py-0.5 rounded text-[10px] font-extrabold border ${
-                  patientData.billingStatus === 'Paid' ? 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20' :
+
+                <span className={`px-2.5 py-0.5 rounded text-[10px] font-extrabold border ${patientData.billingStatus === 'Paid' ? 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20' :
                   patientData.billingStatus === 'Pending' ? 'bg-amber-500/10 text-amber-500 border-amber-500/20' :
-                  'bg-red-500/10 text-red-500 border-red-500/20'
-                }`}>
+                    'bg-red-500/10 text-red-500 border-red-500/20'
+                  }`}>
                   {patientData.billingStatus}
                 </span>
               </div>
-              
+
               <div className="text-[10px] text-slate-450 leading-relaxed bg-slate-50 dark:bg-slate-950 p-3 rounded-xl border border-slate-200/50 dark:border-slate-850">
                 {patientData.billingStatus === 'Paid' ? (
                   <span>All invoice items have been cleared. Payment receipts have been sent to your registered contact.</span>
@@ -273,7 +267,7 @@ const AttenderDashboard = () => {
             {/* Hospital Announcements */}
             <div className="glass-card rounded-2xl p-5 border border-white/20 shadow-sm space-y-4">
               <span className="text-[9px] font-bold text-slate-450 dark:text-slate-550 uppercase tracking-wider block">VK Announcements</span>
-              
+
               <div className="space-y-3.5 max-h-[220px] overflow-y-auto pr-2">
                 {announcements.length === 0 ? (
                   <span className="text-[10px] text-slate-500 block">No notifications today.</span>

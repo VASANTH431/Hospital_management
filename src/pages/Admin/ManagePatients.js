@@ -4,14 +4,14 @@ import { motion, AnimatePresence } from 'framer-motion';
 import api from '../../utils/api';
 import Navbar from '../../components/Navbar';
 import Sidebar from '../../components/Sidebar';
-import { Search, Trash2, CheckCircle, RefreshCw, X, CreditCard } from 'lucide-react';
+import { Search, Trash2, RefreshCw } from 'lucide-react';
 
 const ManagePatients = () => {
   const [patients, setPatients] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
-  
+
   // Modals
   const [deletePatientId, setDeletePatientId] = useState(null);
 
@@ -68,7 +68,7 @@ const ManagePatients = () => {
       p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       p.id.toLowerCase().includes(searchQuery.toLowerCase()) ||
       p.disease.toLowerCase().includes(searchQuery.toLowerCase());
-    
+
     const matchesStatus =
       statusFilter === 'all' || p.status === statusFilter;
 
@@ -80,14 +80,14 @@ const ManagePatients = () => {
       <Navbar roleTitle="Admin Hub" />
       <div className="flex">
         <Sidebar role="admin" />
-        
+
         <main className="flex-1 p-6 md:p-8 space-y-6 overflow-y-auto max-h-[calc(100vh-73px)]">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center space-y-4 md:space-y-0">
             <div>
               <h1 className="text-3xl font-extrabold text-slate-900 dark:text-white">Patient Records Directory</h1>
               <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">Audit complete patient records, modify financial billing parameters, and orchestrate discharge workflows.</p>
             </div>
-            
+
             <button
               onClick={fetchPatients}
               className="flex items-center space-x-2 px-4 py-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-xs font-semibold hover:bg-slate-50 dark:hover:bg-slate-850 hover:text-rosegold-500 transition-all shadow-sm"
@@ -117,11 +117,10 @@ const ManagePatients = () => {
                 <button
                   key={filter}
                   onClick={() => setStatusFilter(filter)}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-semibold capitalize transition-all ${
-                    statusFilter === filter
+                  className={`px-3 py-1.5 rounded-lg text-xs font-semibold capitalize transition-all ${statusFilter === filter
                       ? 'bg-rosegold-500 text-white shadow-sm'
                       : 'text-slate-500 hover:text-rosegold-500'
-                  }`}
+                    }`}
                 >
                   {filter}
                 </button>
@@ -166,19 +165,19 @@ const ManagePatients = () => {
                           </span>
                           <span className="font-extrabold text-slate-900 dark:text-white block mt-1.5">{pat.name}</span>
                         </td>
-                        
+
                         {/* Demographics */}
                         <td className="p-4">
                           <span>{pat.age} Yrs / {pat.gender}</span>
                           <span className="text-[10px] text-slate-450 dark:text-slate-500 block mt-1">Blood Group: {pat.bloodGroup}</span>
                         </td>
-                        
+
                         {/* Medical details */}
                         <td className="p-4">
                           <span className="font-bold text-slate-800 dark:text-slate-200">{pat.disease}</span>
                           <span className="text-[10px] text-slate-450 dark:text-slate-500 block mt-1 truncate max-w-[150px]">Diag: {pat.diagnosis}</span>
                         </td>
-                        
+
                         {/* Bed Allocations */}
                         <td className="p-4">
                           {pat.status === 'admitted' ? (
@@ -190,18 +189,17 @@ const ManagePatients = () => {
                             <span className="text-slate-400 dark:text-slate-550 font-semibold italic">Discharged</span>
                           )}
                         </td>
-                        
+
                         {/* Billing status */}
                         <td className="p-4">
                           <div className="flex items-center space-x-2">
-                            <span className={`px-2 py-0.5 rounded text-[10px] font-extrabold border ${
-                              pat.billingStatus === 'Paid' ? 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20' :
-                              pat.billingStatus === 'Pending' ? 'bg-amber-500/10 text-amber-500 border-amber-500/20' :
-                              'bg-red-500/10 text-red-500 border-red-500/20'
-                            }`}>
+                            <span className={`px-2 py-0.5 rounded text-[10px] font-extrabold border ${pat.billingStatus === 'Paid' ? 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20' :
+                                pat.billingStatus === 'Pending' ? 'bg-amber-500/10 text-amber-500 border-amber-500/20' :
+                                  'bg-red-500/10 text-red-500 border-red-500/20'
+                              }`}>
                               {pat.billingStatus}
                             </span>
-                            
+
                             <select
                               value={pat.billingStatus}
                               onChange={(e) => handleUpdateBilling(pat.id, e.target.value)}
@@ -239,7 +237,7 @@ const ManagePatients = () => {
                                 Discharge
                               </button>
                             )}
-                            
+
                             <button
                               onClick={() => setDeletePatientId(pat.id)}
                               className="p-1.5 text-red-500 bg-red-500/10 hover:bg-red-500/25 border border-red-500/10 rounded-lg transition-all"
@@ -273,7 +271,7 @@ const ManagePatients = () => {
               <div className="w-12 h-12 bg-red-500/10 text-red-500 border border-red-500/20 rounded-full flex items-center justify-center mx-auto shadow-inner">
                 <Trash2 className="w-6 h-6" />
               </div>
-              
+
               <div className="text-center space-y-2">
                 <h3 className="font-extrabold text-slate-900 dark:text-white text-base">Purge Patient Record?</h3>
                 <p className="text-xs text-slate-500 dark:text-slate-400">You are about to delete patient registry ID {deletePatientId}. If they are currently admitted, their bed allocation will be freed.</p>
