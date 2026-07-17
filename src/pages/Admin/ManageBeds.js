@@ -98,8 +98,8 @@ const ManageBeds = () => {
                 key={floor}
                 onClick={() => setSelectedFloor(floor)}
                 className={`px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-all ${selectedFloor === floor
-                    ? 'bg-rosegold-500 text-white shadow-sm'
-                    : 'text-slate-500 hover:text-rosegold-500'
+                  ? 'bg-rosegold-500 text-white shadow-sm'
+                  : 'text-slate-500 hover:text-rosegold-500'
                   }`}
               >
                 {floor}
@@ -112,8 +112,8 @@ const ManageBeds = () => {
             <span className="font-bold flex items-center space-x-1"><Info className="w-4 h-4 text-rosegold-500 mr-1" /> Status Legends:</span>
             <div className="flex items-center space-x-1.5"><span className="w-2.5 h-2.5 rounded-full bg-emerald-500" /> <span>Available</span></div>
             <div className="flex items-center space-x-1.5"><span className="w-2.5 h-2.5 rounded-full bg-rosegold-500" /> <span>Occupied</span></div>
-            <div className="flex items-center space-x-1.5"><span className="w-2.5 h-2.5 rounded-full bg-amber-550" /> <span>Reserved</span></div>
-            <div className="flex items-center space-x-1.5"><span className="w-2.5 h-2.5 rounded-full bg-sky-550" /> <span>Cleaning</span></div>
+            <div className="flex items-center space-x-1.5"><span className="w-2.5 h-2.5 rounded-full bg-amber-500" /> <span>Reserved</span></div>
+            <div className="flex items-center space-x-1.5"><span className="w-2.5 h-2.5 rounded-full bg-sky-500" /> <span>Cleaning</span></div>
             <div className="flex items-center space-x-1.5"><span className="w-2.5 h-2.5 rounded-full bg-rose-500" /> <span>Maintenance</span></div>
           </div>
 
