@@ -34,6 +34,10 @@ const surgerySchema = new mongoose.Schema({
     notes: {
         type: String,
         default: ''
+    },
+    estimatedAmount: {
+        type: Number,
+        default: 0
     }
 }, { timestamps: true });
 

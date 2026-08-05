@@ -5,19 +5,37 @@ import { X } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 import api from '../utils/api';
 
-const SurgeryModal = ({ patient, doctorId, onClose, onBook }) => {
-    const { register, handleSubmit } = useForm();
+const SurgeryModal = ({ patient, doctorId, onClose, onBook, surgeryToEdit }) => {
+    // Format date for datetime-local input
+    const formatDateTime = (dateString) => {
+        if (!dateString) return '';
+        const d = new Date(dateString);
+        return new Date(d.getTime() - d.getTimezoneOffset() * 60000).toISOString().slice(0, 16);
+    };
+
+    const { register, handleSubmit } = useForm({
+        defaultValues: surgeryToEdit ? {
+            ...surgeryToEdit,
+            surgeryDate: formatDateTime(surgeryToEdit.surgeryDate)
+        } : {}
+    });
 
     const onSubmit = async (data) => {
         try {
-            const payload = {
-                ...data,
-                patientId: patient.id,
-                doctorId: doctorId,
-            };
-            const res = await api.post('/surgeries', payload);
-            toast.success(`Surgery ${data.surgeryName} booked successfully!`);
-            onBook(res.data);
+            if (surgeryToEdit) {
+                const res = await api.put(`/surgeries/${surgeryToEdit.id}`, data);
+                toast.success(`Surgery ${data.surgeryName} updated successfully!`);
+                onBook(res.data);
+            } else {
+                const payload = {
+                    ...data,
+                    patientId: patient.id,
+                    doctorId: doctorId,
+                };
+                const res = await api.post('/surgeries', payload);
+                toast.success(`Surgery ${data.surgeryName} booked successfully!`);
+                onBook(res.data);
+            }
         } catch (error) {
             toast.error(error.response?.data?.message || 'Surgery booking failed');
         }
@@ -32,7 +50,9 @@ const SurgeryModal = ({ patient, doctorId, onClose, onBook }) => {
                 className="w-full max-w-2xl bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-2xl overflow-hidden max-h-[90vh] flex flex-col"
             >
                 <div className="p-6 border-b border-slate-200/50 dark:border-slate-800/40 flex justify-between items-center bg-slate-50/50 dark:bg-slate-950/20">
-                    <h3 className="font-bold text-slate-900 dark:text-white text-base">Book Surgery for {patient?.name}</h3>
+                    <h3 className="font-bold text-slate-900 dark:text-white text-base">
+                        {surgeryToEdit ? `Edit Surgery: ${surgeryToEdit.surgeryName}` : `Book Surgery for ${patient?.name}`}
+                    </h3>
                     <button onClick={onClose} className="p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-450 transition-colors">
                         <X className="w-5 h-5" />
                     </button>
@@ -74,6 +94,15 @@ const SurgeryModal = ({ patient, doctorId, onClose, onBook }) => {
                                     <option value="Minor Procedure Room">Minor Procedure Room</option>
                                 </select>
                             </div>
+                            <div className="space-y-1">
+                                <label className="text-xs font-semibold text-slate-500">Estimated Amount (₹)</label>
+                                <input
+                                    type="number"
+                                    className="w-full bg-white/50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-xl py-2 px-3 text-xs"
+                                    placeholder="e.g. 150000"
+                                    {...register('estimatedAmount', { required: 'Required' })}
+                                />
+                            </div>
                         </div>
                         <div className="space-y-1">
                             <label className="text-xs font-semibold text-slate-500">Pre-Surgery Notes</label>
@@ -91,7 +120,7 @@ const SurgeryModal = ({ patient, doctorId, onClose, onBook }) => {
                             Cancel
                         </button>
                         <button type="submit" className="flex-1 py-3 bg-rosegold-500 hover:bg-rosegold-600 hover:glow-rosegold text-white text-xs font-semibold rounded-xl transition-all">
-                            Schedule Operation
+                            {surgeryToEdit ? 'Save Changes' : 'Schedule Operation'}
                         </button>
                     </div>
                 </form>

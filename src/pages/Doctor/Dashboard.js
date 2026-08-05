@@ -39,6 +39,7 @@ const DoctorDashboard = () => {
   const [showEditProgressId, setShowEditProgressId] = useState(null);
   const [showEditPatient, setShowEditPatient] = useState(null);
   const [showSurgeryModal, setShowSurgeryModal] = useState(null);
+  const [editingSurgery, setEditingSurgery] = useState(null);
 
   // Progress edit range value
   const [progressVal, setProgressVal] = useState(50);
@@ -371,8 +372,18 @@ const DoctorDashboard = () => {
                         <h4 className="text-sm font-bold text-slate-900 dark:text-white">{surgery.surgeryName}</h4>
                         <p className="text-xs text-slate-500 font-medium mt-0.5">Patient ID: {surgery.patientId}</p>
                         <p className="text-[10px] text-slate-450 mt-1">OT: {surgery.operationTheater} | Scheduled: {new Date(surgery.surgeryDate).toLocaleString()}</p>
+                        {surgery.estimatedAmount > 0 && (
+                          <p className="text-[10px] text-slate-500 mt-0.5 font-semibold text-rosegold-500">Amount: ₹{surgery.estimatedAmount}</p>
+                        )}
                       </div>
-                      <div>
+                      <div className="flex items-center space-x-3">
+                        <button
+                          onClick={() => setEditingSurgery(surgery)}
+                          className="p-1.5 border border-slate-200 dark:border-slate-800 text-slate-500 hover:text-rosegold-500 hover:border-rosegold-500 rounded-lg text-xs transition-colors"
+                          title="Edit Surgery"
+                        >
+                          <Edit className="w-3.5 h-3.5" />
+                        </button>
                         <span className={`px-2.5 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider ${surgery.status === 'Completed' ? 'bg-emerald-500/10 text-emerald-500' :
                           surgery.status === 'Cancelled' ? 'bg-red-500/10 text-red-500' : 'bg-rosegold-500/10 text-rosegold-500'
                           }`}>
@@ -833,6 +844,22 @@ const DoctorDashboard = () => {
           }}
         />
       )}
+
+      {/* DIALOG: EDIT SURGERY BOOKING */}
+      <AnimatePresence>
+        {editingSurgery && (
+          <SurgeryModal
+            patient={patients.find((p) => p.id === editingSurgery.patientId) || { id: editingSurgery.patientId }}
+            doctorId={user.id}
+            surgeryToEdit={editingSurgery}
+            onClose={() => setEditingSurgery(null)}
+            onBook={(updatedSurgery) => {
+              setSurgeries((prev) => prev.map((s) => s.id === updatedSurgery.id ? updatedSurgery : s));
+              setEditingSurgery(null);
+            }}
+          />
+        )}
+      </AnimatePresence>
 
     </div>
   );

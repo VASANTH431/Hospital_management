@@ -15,7 +15,7 @@ const logEvent = async (type, message, user, details = {}) => {
 // @route   POST /api/surgeries
 // @access  Private (Admin / Doctor)
 const bookSurgery = async (req, res) => {
-    const { patientId, doctorId, surgeryName, surgeryDate, operationTheater, notes } = req.body;
+    const { patientId, doctorId, surgeryName, surgeryDate, operationTheater, notes, estimatedAmount } = req.body;
 
     if (!patientId || !doctorId || !surgeryName || !surgeryDate || !operationTheater) {
         return res.status(400).json({ message: 'Please fill in all required fields' });
@@ -47,6 +47,7 @@ const bookSurgery = async (req, res) => {
             surgeryDate,
             operationTheater,
             notes: notes || '',
+            estimatedAmount: estimatedAmount || 0,
             status: 'Scheduled'
         });
 
@@ -94,7 +95,7 @@ const updateSurgery = async (req, res) => {
         const surgery = await Surgery.findOne({ id: req.params.id });
         if (!surgery) return res.status(404).json({ message: 'Surgery not found' });
 
-        const fieldsToUpdate = ['surgeryName', 'surgeryDate', 'operationTheater', 'status', 'notes'];
+        const fieldsToUpdate = ['surgeryName', 'surgeryDate', 'operationTheater', 'status', 'notes', 'estimatedAmount'];
         fieldsToUpdate.forEach(field => {
             if (req.body[field] !== undefined) {
                 surgery[field] = req.body[field];
