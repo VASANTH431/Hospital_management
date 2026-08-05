@@ -7,6 +7,8 @@ import { useAuth } from '../../context/AuthContext';
 import { useSocket } from '../../context/SocketContext';
 import Navbar from '../../components/Navbar';
 import Sidebar from '../../components/Sidebar';
+import EditPatientModal from '../../components/EditPatientModal';
+import SurgeryModal from '../../components/SurgeryModal';
 import {
   UserPlus,
   Search,
@@ -15,7 +17,10 @@ import {
   Activity,
   Bed,
   FileText,
-  TrendingUp
+  TrendingUp,
+  Edit,
+  Stethoscope,
+  Calendar
 } from 'lucide-react';
 
 const DoctorDashboard = () => {
@@ -23,13 +28,17 @@ const DoctorDashboard = () => {
   const socket = useSocket();
   const [patients, setPatients] = useState([]);
   const [beds, setBeds] = useState([]);
+  const [surgeries, setSurgeries] = useState([]);
 
   const [searchQuery, setSearchQuery] = useState('');
+  const [activeTab, setActiveTab] = useState('patients');
 
   // Modals
   const [showAdmitModal, setShowAdmitModal] = useState(false);
   const [showDetailsPatient, setShowDetailsPatient] = useState(null);
   const [showEditProgressId, setShowEditProgressId] = useState(null);
+  const [showEditPatient, setShowEditPatient] = useState(null);
+  const [showSurgeryModal, setShowSurgeryModal] = useState(null);
 
   // Progress edit range value
   const [progressVal, setProgressVal] = useState(50);
@@ -39,17 +48,26 @@ const DoctorDashboard = () => {
 
   const fetchData = async () => {
     try {
-      const [patientsRes, bedsRes] = await Promise.all([
-        api.get('/patients'),
-        api.get('/beds')
-      ]);
-
-      // Filter patients assigned to this doctor
+      const patientsRes = await api.get('/patients');
       const myPatients = patientsRes.data.filter((p) => p.doctorId === user.id);
       setPatients(myPatients);
+    } catch (error) {
+      toast.error('Failed to load patient telemetry');
+    }
+
+    try {
+      const bedsRes = await api.get('/beds');
       setBeds(bedsRes.data);
     } catch (error) {
-      toast.error('Failed to load clinical telemetry');
+      toast.error('Failed to load active bed statuses');
+    }
+
+    try {
+      const surgeriesRes = await api.get('/surgeries');
+      setSurgeries(surgeriesRes.data.filter((s) => s.doctorId === user.id));
+    } catch (error) {
+      const msg = error.response?.data?.message || error.message;
+      toast.error('Failed to load surgery bookings: ' + msg);
     }
   };
 
@@ -74,9 +92,20 @@ const DoctorDashboard = () => {
       }
     });
 
+    socket.on('surgery_update', (updatedSurgery) => {
+      if (updatedSurgery.doctorId === user.id) {
+        setSurgeries((prev) => {
+          const exists = prev.find(s => s.id === updatedSurgery.id);
+          if (exists) return prev.map(s => s.id === updatedSurgery.id ? updatedSurgery : s);
+          return [...prev, updatedSurgery];
+        });
+      }
+    });
+
     return () => {
       socket.off('bed_update');
       socket.off('patient_update');
+      socket.off('surgery_update');
     };
   }, [socket, user]);
 
@@ -210,90 +239,153 @@ const DoctorDashboard = () => {
             />
           </div>
 
-          {/* Patients Listing */}
-          <div className="glass-card rounded-2xl border border-white/20 p-6 shadow-sm">
-            <h3 className="font-bold text-slate-900 dark:text-white text-sm mb-4">My Assigned Patients</h3>
+          {/* Tabs */}
+          <div className="flex border-b border-slate-200 dark:border-slate-800 mb-6 space-x-6">
+            <button
+              onClick={() => setActiveTab('patients')}
+              className={`pb-3 text-sm font-bold border-b-2 transition-colors ${activeTab === 'patients' ? 'text-rosegold-500 border-rosegold-500' : 'text-slate-500 border-transparent hover:text-slate-700 dark:hover:text-slate-300'}`}
+            >
+              My Patients
+            </button>
+            <button
+              onClick={() => setActiveTab('surgeries')}
+              className={`pb-3 text-sm font-bold border-b-2 transition-colors ${activeTab === 'surgeries' ? 'text-rosegold-500 border-rosegold-500' : 'text-slate-500 border-transparent hover:text-slate-700 dark:hover:text-slate-300'}`}
+            >
+              Surgeries & Bookings
+            </button>
+          </div>
 
-            {filteredPatients.length === 0 ? (
-              <div className="text-center py-16 text-slate-450 space-y-2">
-                <FileText className="w-10 h-10 mx-auto text-slate-350" />
-                <p className="text-xs font-semibold">No active patient records found matching query.</p>
-              </div>
-            ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {filteredPatients.map((pat) => (
-                  <motion.div
-                    key={pat.id}
-                    className="p-5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white/40 dark:bg-slate-900/40 flex flex-col justify-between space-y-4 shadow-sm"
-                  >
-                    <div>
-                      <div className="flex justify-between items-start">
-                        <div>
-                          <span className="text-[9px] font-bold text-rosegold-750 dark:text-rosegold-400 bg-rosegold-50 dark:bg-rosegold-950/20 px-2 py-0.5 rounded border border-rosegold-200/5">
-                            {pat.id}
+          {activeTab === 'patients' && (
+            <div className="glass-card rounded-2xl border border-white/20 p-6 shadow-sm">
+              <h3 className="font-bold text-slate-900 dark:text-white text-sm mb-4">My Assigned Patients</h3>
+
+              {filteredPatients.length === 0 ? (
+                <div className="text-center py-16 text-slate-450 space-y-2">
+                  <FileText className="w-10 h-10 mx-auto text-slate-350" />
+                  <p className="text-xs font-semibold">No active patient records found matching query.</p>
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {filteredPatients.map((pat) => (
+                    <motion.div
+                      key={pat.id}
+                      className="p-5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white/40 dark:bg-slate-900/40 flex flex-col justify-between space-y-4 shadow-sm"
+                    >
+                      <div>
+                        <div className="flex justify-between items-start">
+                          <div>
+                            <span className="text-[9px] font-bold text-rosegold-750 dark:text-rosegold-400 bg-rosegold-50 dark:bg-rosegold-950/20 px-2 py-0.5 rounded border border-rosegold-200/5">
+                              {pat.id}
+                            </span>
+                            <h4 className="text-base font-extrabold text-slate-900 dark:text-white mt-1.5">{pat.name}</h4>
+                            <p className="text-xs text-slate-500 dark:text-slate-400 font-semibold">{pat.age} Yrs • {pat.gender}</p>
+                          </div>
+                          <span className={`px-2 py-0.5 rounded text-[9px] font-bold uppercase ${pat.status === 'admitted' ? 'bg-rosegold-500/10 text-rosegold-500' : 'bg-slate-500/10 text-slate-500'
+                            }`}>
+                            {pat.status}
                           </span>
-                          <h4 className="text-base font-extrabold text-slate-900 dark:text-white mt-1.5">{pat.name}</h4>
-                          <p className="text-xs text-slate-500 dark:text-slate-400 font-semibold">{pat.age} Yrs • {pat.gender}</p>
                         </div>
-                        <span className={`px-2 py-0.5 rounded text-[9px] font-bold uppercase ${pat.status === 'admitted' ? 'bg-rosegold-500/10 text-rosegold-500' : 'bg-slate-500/10 text-slate-500'
+
+                        <div className="mt-4 pt-3 border-t border-slate-100 dark:border-slate-850 text-xs text-slate-650 dark:text-slate-450 space-y-1 font-medium">
+                          <p className="truncate"><span className="text-slate-400">Diagnosis:</span> {pat.disease}</p>
+                          {pat.status === 'admitted' && (
+                            <p><span className="text-slate-400">Location:</span> {pat.bedId} ({pat.floor})</p>
+                          )}
+                          <p><span className="text-slate-400">Billing:</span> {pat.billingStatus}</p>
+                        </div>
+
+                        {/* Progress bar */}
+                        <div className="mt-4 space-y-1.5">
+                          <div className="flex justify-between text-[10px] font-bold text-slate-500">
+                            <span>Recovery progress</span>
+                            <span className="text-rosegold-500">{pat.recoveryProgress}%</span>
+                          </div>
+                          <div className="w-full bg-slate-200 dark:bg-slate-800 h-1.5 rounded-full overflow-hidden">
+                            <div className="bg-rosegold-500 h-full rounded-full" style={{ width: `${pat.recoveryProgress}%` }} />
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="flex space-x-2 pt-2 border-t border-slate-100 dark:border-slate-850">
+                        <button
+                          onClick={() => setShowDetailsPatient(pat)}
+                          className="flex-1 py-1.5 bg-slate-105 hover:bg-slate-200 dark:bg-slate-850 dark:hover:bg-slate-800 text-[10px] font-bold rounded-lg text-slate-700 dark:text-slate-300 transition-colors"
+                        >
+                          Details
+                        </button>
+                        {pat.status === 'admitted' && (
+                          <>
+                            <button
+                              onClick={() => setShowEditPatient(pat)}
+                              className="p-1.5 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 rounded-lg text-xs"
+                              title="Edit Details"
+                            >
+                              <Edit className="w-3.5 h-3.5" />
+                            </button>
+                            <button
+                              onClick={() => setShowSurgeryModal(pat)}
+                              className="p-1.5 border border-indigo-200 dark:border-indigo-850 text-indigo-600 dark:text-indigo-400 rounded-lg text-xs"
+                              title="Book Surgery"
+                            >
+                              <Stethoscope className="w-3.5 h-3.5" />
+                            </button>
+                            <button
+                              onClick={() => {
+                                setShowEditProgressId(pat.id);
+                                setProgressVal(pat.recoveryProgress);
+                              }}
+                              className="p-1.5 border border-rosegold-200 dark:border-rosegold-850 text-rosegold-600 dark:text-rosegold-400 rounded-lg text-xs"
+                              title="Update progress"
+                            >
+                              <TrendingUp className="w-3.5 h-3.5" />
+                            </button>
+                            <button
+                              onClick={() => handleDischarge(pat.id)}
+                              className="px-2.5 py-1.5 bg-indigo-500/10 text-indigo-500 border border-indigo-500/10 hover:bg-indigo-500/20 text-[10px] font-bold rounded-lg transition-colors"
+                            >
+                              Discharge
+                            </button>
+                          </>
+                        )}
+                      </div>
+                    </motion.div>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+
+          {activeTab === 'surgeries' && (
+            <div className="glass-card rounded-2xl border border-white/20 p-6 shadow-sm mb-6">
+              <h3 className="font-bold text-slate-900 dark:text-white text-sm mb-4">Scheduled Surgeries</h3>
+              {surgeries.length === 0 ? (
+                <div className="text-center py-16 text-slate-450 space-y-2">
+                  <Calendar className="w-10 h-10 mx-auto text-slate-350" />
+                  <p className="text-xs font-semibold">No surgeries booked yet.</p>
+                </div>
+              ) : (
+                <div className="flex flex-col space-y-3">
+                  {surgeries.map((surgery) => (
+                    <div key={surgery.id} className="p-4 bg-white/40 dark:bg-slate-900/40 border border-slate-200 dark:border-slate-800 rounded-xl flex justify-between items-center shadow-sm">
+                      <div>
+                        <h4 className="text-sm font-bold text-slate-900 dark:text-white">{surgery.surgeryName}</h4>
+                        <p className="text-xs text-slate-500 font-medium mt-0.5">Patient ID: {surgery.patientId}</p>
+                        <p className="text-[10px] text-slate-450 mt-1">OT: {surgery.operationTheater} | Scheduled: {new Date(surgery.surgeryDate).toLocaleString()}</p>
+                      </div>
+                      <div>
+                        <span className={`px-2.5 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider ${surgery.status === 'Completed' ? 'bg-emerald-500/10 text-emerald-500' :
+                          surgery.status === 'Cancelled' ? 'bg-red-500/10 text-red-500' : 'bg-rosegold-500/10 text-rosegold-500'
                           }`}>
-                          {pat.status}
+                          {surgery.status}
                         </span>
                       </div>
-
-                      <div className="mt-4 pt-3 border-t border-slate-100 dark:border-slate-850 text-xs text-slate-650 dark:text-slate-450 space-y-1 font-medium">
-                        <p className="truncate"><span className="text-slate-400">Diagnosis:</span> {pat.disease}</p>
-                        {pat.status === 'admitted' && (
-                          <p><span className="text-slate-400">Location:</span> {pat.bedId} ({pat.floor})</p>
-                        )}
-                        <p><span className="text-slate-400">Billing:</span> {pat.billingStatus}</p>
-                      </div>
-
-                      {/* Progress bar */}
-                      <div className="mt-4 space-y-1.5">
-                        <div className="flex justify-between text-[10px] font-bold text-slate-500">
-                          <span>Recovery progress</span>
-                          <span className="text-rosegold-500">{pat.recoveryProgress}%</span>
-                        </div>
-                        <div className="w-full bg-slate-200 dark:bg-slate-800 h-1.5 rounded-full overflow-hidden">
-                          <div className="bg-rosegold-500 h-full rounded-full" style={{ width: `${pat.recoveryProgress}%` }} />
-                        </div>
-                      </div>
                     </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
 
-                    <div className="flex space-x-2 pt-2 border-t border-slate-100 dark:border-slate-850">
-                      <button
-                        onClick={() => setShowDetailsPatient(pat)}
-                        className="flex-1 py-1.5 bg-slate-105 hover:bg-slate-200 dark:bg-slate-850 dark:hover:bg-slate-800 text-[10px] font-bold rounded-lg text-slate-700 dark:text-slate-300 transition-colors"
-                      >
-                        Check Card
-                      </button>
-                      {pat.status === 'admitted' && (
-                        <>
-                          <button
-                            onClick={() => {
-                              setShowEditProgressId(pat.id);
-                              setProgressVal(pat.recoveryProgress);
-                            }}
-                            className="p-1.5 border border-rosegold-200 dark:border-rosegold-850 text-rosegold-600 dark:text-rosegold-400 rounded-lg text-xs"
-                            title="Update progress"
-                          >
-                            <TrendingUp className="w-3.5 h-3.5" />
-                          </button>
-                          <button
-                            onClick={() => handleDischarge(pat.id)}
-                            className="px-2.5 py-1.5 bg-indigo-500/10 text-indigo-500 border border-indigo-500/10 hover:bg-indigo-500/20 text-[10px] font-bold rounded-lg transition-colors"
-                          >
-                            Discharge
-                          </button>
-                        </>
-                      )}
-                    </div>
-                  </motion.div>
-                ))}
-              </div>
-            )}
-          </div>
         </main>
       </div>
 
@@ -716,6 +808,31 @@ const DoctorDashboard = () => {
           </div>
         )}
       </AnimatePresence>
+
+      {showEditPatient && (
+        <EditPatientModal
+          patient={showEditPatient}
+          beds={beds}
+          onClose={() => setShowEditPatient(null)}
+          onUpdate={(updatedData) => {
+            setPatients(prev => prev.map(p => p.id === updatedData.id ? updatedData : p));
+            setShowEditPatient(null);
+          }}
+        />
+      )}
+
+      {showSurgeryModal && (
+        <SurgeryModal
+          patient={showSurgeryModal}
+          doctorId={user.id}
+          onClose={() => setShowSurgeryModal(null)}
+          onBook={(newSurgery) => {
+            setSurgeries(prev => [newSurgery, ...prev]);
+            setShowSurgeryModal(null);
+            setActiveTab('surgeries'); // redirect to surgeries view
+          }}
+        />
+      )}
 
     </div>
   );

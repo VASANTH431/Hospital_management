@@ -53,10 +53,16 @@ const ManageBeds = () => {
   };
 
   const floors = ['All', 'Ground', 'First', 'Second', 'Third', 'ICU', 'Emergency', 'VIP', 'General Ward'];
+  const floorsOrder = floors.slice(1);
 
-  const filteredBeds = selectedFloor === 'All'
-    ? beds
-    : beds.filter((b) => b.floor === selectedFloor);
+  const filteredBeds = (selectedFloor === 'All'
+    ? [...beds]
+    : beds.filter((b) => b.floor === selectedFloor))
+    .sort((a, b) => {
+      const floorDiff = floorsOrder.indexOf(a.floor) - floorsOrder.indexOf(b.floor);
+      if (floorDiff !== 0) return floorDiff;
+      return String(a.bedNumber).localeCompare(String(b.bedNumber), undefined, { numeric: true, sensitivity: 'base' });
+    });
 
   const getStatusStyle = (status) => {
     switch (status) {
