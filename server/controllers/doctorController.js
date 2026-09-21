@@ -40,9 +40,27 @@ const addDoctor = async (req, res) => {
       return res.status(400).json({ message: 'Doctor with this email already exists' });
     }
 
-    // Generate unique Doctor ID: e.g. DOC101, DOC102...
-    const count = await Doctor.countDocuments();
-    const generatedId = `DOC${101 + count}`;
+    // Generate unique Doctor ID dynamically by finding the highest existing numeric ID
+    const allDoctors = await Doctor.find({}, { id: 1 });
+    let maxIdNum = 100;
+    allDoctors.forEach((doc) => {
+      if (doc.id) {
+        const match = doc.id.match(/\d+/);
+        if (match) {
+          const num = parseInt(match[0], 10);
+          if (!isNaN(num) && num > maxIdNum) {
+            maxIdNum = num;
+          }
+        }
+      }
+    });
+
+    let nextNum = maxIdNum + 1;
+    let generatedId = `DOC${nextNum}`;
+    while (await Doctor.findOne({ id: generatedId })) {
+      nextNum++;
+      generatedId = `DOC${nextNum}`;
+    }
 
     // Generate a readable password: e.g., name (lowercase) + random 3-digit number
     const cleanName = name.toLowerCase().replace(/[^a-z0-9]/g, '');
