@@ -56,10 +56,14 @@ const Navbar = ({ roleTitle }) => {
         {/* Dark Mode Toggle */}
         <button
           onClick={() => setDarkMode(!darkMode)}
-          className="p-2 rounded-xl bg-white/40 dark:bg-slate-900/40 hover:bg-white/60 dark:hover:bg-slate-900/60 border border-slate-200/50 dark:border-slate-800/40 text-slate-500 dark:text-slate-400 hover:text-rosegold-500 transition-colors"
-          title="Toggle Light/Dark Mode"
+          className="w-10 h-10 rounded-2xl bg-slate-50/90 dark:bg-slate-900/90 hover:bg-white dark:hover:bg-slate-850 border border-slate-200/80 dark:border-slate-800/80 flex items-center justify-center shadow-sm hover:shadow transition-all duration-300"
+          title="Toggle Light/Dark Theme"
         >
-          {darkMode ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+          {darkMode ? (
+            <Sun className="w-5 h-5 text-amber-400 stroke-[1.75]" />
+          ) : (
+            <Moon className="w-5 h-5 text-slate-600 stroke-[1.75]" />
+          )}
         </button>
 
         {/* User Card */}

@@ -173,13 +173,17 @@ const LandingPage = () => {
 
         {/* Header Actions */}
         <div className="flex items-center space-x-3 sm:space-x-4">
-          {/* Theme Switcher Button */}
+          {/* Theme Switcher Button (Custom Squircle Style matching screenshot) */}
           <button
             onClick={() => setDarkMode(!darkMode)}
-            className="p-2 rounded-xl bg-white/60 dark:bg-slate-900/60 hover:bg-white dark:hover:bg-slate-900 border border-slate-200/60 dark:border-slate-800/60 text-slate-600 dark:text-slate-300 hover:text-rosegold-500 dark:hover:text-rosegold-400 transition-all shadow-sm"
+            className="w-10 h-10 rounded-2xl bg-slate-50/90 dark:bg-slate-900/90 hover:bg-white dark:hover:bg-slate-850 border border-slate-200/80 dark:border-slate-800/80 flex items-center justify-center shadow-sm hover:shadow transition-all duration-300"
             title="Toggle Light/Dark Theme"
           >
-            {darkMode ? <Sun className="w-4 h-4 text-amber-400" /> : <Moon className="w-4 h-4 text-slate-600" />}
+            {darkMode ? (
+              <Sun className="w-5 h-5 text-amber-400 stroke-[1.75]" />
+            ) : (
+              <Moon className="w-5 h-5 text-slate-600 stroke-[1.75]" />
+            )}
           </button>
 
           {!showPortals ? (
