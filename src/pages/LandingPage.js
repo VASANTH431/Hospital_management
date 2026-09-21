@@ -19,7 +19,9 @@ import {
   CheckCircle2,
   Sparkles,
   LogIn,
-  ArrowLeft
+  ArrowLeft,
+  Sun,
+  Moon
 } from 'lucide-react';
 
 const LandingPage = () => {
@@ -28,6 +30,22 @@ const LandingPage = () => {
   const [showPortals, setShowPortals] = useState(false);
   const [typedText, setTypedText] = useState('');
   const fullText = "Real-Time Patient Flow Optimization & Bed Capacity Orchestration";
+
+  // Dark/Light Mode state
+  const [darkMode, setDarkMode] = useState(() => {
+    return localStorage.getItem('vk_theme') === 'dark' ||
+      (!localStorage.getItem('vk_theme') && window.matchMedia('(pre-matches-scheme: dark)').matches);
+  });
+
+  useEffect(() => {
+    if (darkMode) {
+      document.body.classList.add('dark');
+      localStorage.setItem('vk_theme', 'dark');
+    } else {
+      document.body.classList.remove('dark');
+      localStorage.setItem('vk_theme', 'light');
+    }
+  }, [darkMode]);
 
   useEffect(() => {
     // If URL has ?portals=true or ?login=true, show portals directly
@@ -154,7 +172,16 @@ const LandingPage = () => {
         </div>
 
         {/* Header Actions */}
-        <div className="flex items-center space-x-4">
+        <div className="flex items-center space-x-3 sm:space-x-4">
+          {/* Theme Switcher Button */}
+          <button
+            onClick={() => setDarkMode(!darkMode)}
+            className="p-2 rounded-xl bg-white/60 dark:bg-slate-900/60 hover:bg-white dark:hover:bg-slate-900 border border-slate-200/60 dark:border-slate-800/60 text-slate-600 dark:text-slate-300 hover:text-rosegold-500 dark:hover:text-rosegold-400 transition-all shadow-sm"
+            title="Toggle Light/Dark Theme"
+          >
+            {darkMode ? <Sun className="w-4 h-4 text-amber-400" /> : <Moon className="w-4 h-4 text-slate-600" />}
+          </button>
+
           {!showPortals ? (
             <>
               <button
