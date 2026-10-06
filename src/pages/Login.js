@@ -87,7 +87,7 @@ const Login = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-slatebg-50 dark:bg-slatebg-950 flex flex-col items-center justify-center p-4 particle-grid relative overflow-hidden">
+    <div className="min-h-screen bg-slatebg-50 dark:bg-slatebg-950 flex flex-col items-center justify-center p-4 particle-grid relative">
       {/* Decorative Blurs */}
       <div className="absolute top-[-10%] left-[-10%] w-[350px] h-[350px] rounded-full bg-rosegold-100/30 dark:bg-rosegold-900/10 filter blur-[80px] pointer-events-none" />
       <div className="absolute bottom-[-10%] right-[-10%] w-[350px] h-[350px] rounded-full bg-rosegold-200/20 dark:bg-rosegold-950/10 filter blur-[80px] pointer-events-none" />

@@ -8,6 +8,7 @@ import { SocketProvider } from './context/SocketContext';
 
 // Components
 import ProtectedRoute from './components/ProtectedRoute';
+import AIAssistantBot from './components/AIAssistantBot';
 
 // Pages
 import LandingPage from './pages/LandingPage';
@@ -96,6 +97,9 @@ function App() {
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
           
+          {/* Global 3D AI Assistant Bot */}
+          <AIAssistantBot />
+
           {/* Toast notifications */}
           <Toaster
             position="top-right"

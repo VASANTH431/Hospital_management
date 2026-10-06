@@ -5,12 +5,34 @@
 @tailwind utilities;
 
 @layer base {
+  html {
+    overflow-x: hidden;
+    overflow-y: auto;
+    scroll-behavior: smooth;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+  }
+
   body {
+    overflow-x: clip;
+    overflow-y: visible;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    min-height: 100vh;
     @apply bg-slatebg-50 text-slate-800 font-sans transition-colors duration-300;
   }
 
   body.dark {
     @apply bg-slatebg-950 text-slate-200;
+  }
+
+  #root {
+    overflow-x: clip;
+    overflow-y: visible;
+    width: 100%;
+    min-height: 100vh;
   }
 }
 

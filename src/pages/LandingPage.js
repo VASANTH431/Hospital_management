@@ -155,7 +155,7 @@ const LandingPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slatebg-50 dark:bg-slatebg-950 relative overflow-x-hidden particle-grid flex flex-col justify-between">
+    <div className="min-h-screen bg-slatebg-50 dark:bg-slatebg-950 relative particle-grid flex flex-col justify-between">
       {/* Decorative Blur Spheres */}
       <div className="absolute top-[-10%] right-[-10%] w-[500px] h-[500px] rounded-full bg-rosegold-100/40 dark:bg-rosegold-900/10 filter blur-[120px] pointer-events-none" />
       <div className="absolute bottom-[-10%] left-[-10%] w-[500px] h-[500px] rounded-full bg-rosegold-200/30 dark:bg-rosegold-950/15 filter blur-[120px] pointer-events-none" />
