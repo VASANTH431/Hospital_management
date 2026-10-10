@@ -52,6 +52,7 @@ const doctorRoutes = require('./routes/doctorRoutes');
 const bedRoutes = require('./routes/bedRoutes');
 const patientRoutes = require('./routes/patientRoutes');
 const surgeryRoutes = require('./routes/surgeryRoutes');
+const aiRoutes = require('./routes/aiRoutes');
 
 // Use Routes
 app.use('/api/auth', authRoutes);
@@ -59,6 +60,7 @@ app.use('/api/doctors', doctorRoutes);
 app.use('/api/beds', bedRoutes);
 app.use('/api/patients', patientRoutes);
 app.use('/api/surgeries', surgeryRoutes);
+app.use('/api/ai', aiRoutes);
 
 // Base Endpoint
 app.get('/', (req, res) => {
