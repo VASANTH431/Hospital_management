@@ -1,10 +1,8 @@
+require('dotenv').config();
 const { GoogleGenerativeAI } = require('@google/generative-ai');
 const Patient = require('../models/Patient');
 const Doctor = require('../models/Doctor');
 const Bed = require('../models/Bed');
-
-// Initialise Gemini
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
 // ─── Context Builders ─────────────────────────────────────────────────────────
 
@@ -203,9 +201,10 @@ const chat = async (req, res) => {
       return res.status(403).json({ message: 'AI assistant not available for your role.' });
     }
 
-    // 2. Initialise Gemini model (gemini-3.8-flash is primary)
+    // 2. Initialise Gemini model with fallback and retry for transient 503 errors
+    const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
     let responseText;
-    const modelNames = ['gemini-3.8-flash', 'gemini-2.5-flash', 'gemini-1.5-flash'];
+    const modelNames = ['gemini-3.8-flash', 'gemini-3.5-flash-lite'];
     let lastError = null;
 
     const safeHistory = (history || []).filter(
@@ -213,26 +212,35 @@ const chat = async (req, res) => {
     );
 
     for (const modelName of modelNames) {
-      try {
-        const model = genAI.getGenerativeModel({
-          model: modelName,
-          systemInstruction: systemContext
-        });
+      for (let attempt = 1; attempt <= 2; attempt++) {
+        try {
+          const model = genAI.getGenerativeModel({
+            model: modelName,
+            systemInstruction: systemContext
+          });
 
-        const chat = model.startChat({
-          history: safeHistory
-        });
+          const chat = model.startChat({
+            history: safeHistory
+          });
 
-        const result = await chat.sendMessage(message.trim());
-        responseText = result.response.text();
-        if (responseText) break;
-      } catch (err) {
-        lastError = err;
-        console.warn(`Gemini model ${modelName} failed:`, err.message);
-        if (err.message?.includes('API_KEY_INVALID') || err.message?.includes('API key')) {
-          throw err; // Don't loop through models if the key itself is invalid
+          const result = await chat.sendMessage(message.trim());
+          responseText = result.response.text();
+          if (responseText) break;
+        } catch (err) {
+          lastError = err;
+          console.warn(`Gemini model ${modelName} (attempt ${attempt}) failed:`, err.message);
+          if (err.message?.includes('API_KEY_INVALID') || err.message?.includes('API key')) {
+            throw err; // Don't retry if API key is invalid
+          }
+          if (err.message?.includes('503') || err.message?.includes('high demand') || err.message?.includes('RESOURCE_EXHAUSTED')) {
+            // Wait 1 second before retrying
+            await new Promise((resolve) => setTimeout(resolve, 1000));
+          } else {
+            break; // Non-transient error for this model, try next model
+          }
         }
       }
+      if (responseText) break;
     }
 
     if (!responseText) {
