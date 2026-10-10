@@ -212,7 +212,7 @@ const ManageDoctors = () => {
                   <input
                     type="text"
                     className="w-full bg-white/50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-xl py-2.5 px-4 text-xs focus:outline-none focus:border-rosegold-400 transition-colors"
-                    placeholder="e.g. Dr. Kavya Vasanth"
+                    placeholder="Enter physician full name"
                     {...register('name', { required: 'Name is required' })}
                   />
                   {errors.name && <span className="text-[9px] text-red-500">{errors.name.message}</span>}
@@ -223,7 +223,7 @@ const ManageDoctors = () => {
                   <input
                     type="email"
                     className="w-full bg-white/50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-xl py-2.5 px-4 text-xs focus:outline-none focus:border-rosegold-400 transition-colors"
-                    placeholder="kavya.v@vkhospital.com"
+                    placeholder="Enter email address"
                     {...register('email', { required: 'Email is required' })}
                   />
                   {errors.email && <span className="text-[9px] text-red-500">{errors.email.message}</span>}
@@ -234,7 +234,7 @@ const ManageDoctors = () => {
                   <input
                     type="text"
                     className="w-full bg-white/50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-xl py-2.5 px-4 text-xs focus:outline-none focus:border-rosegold-400 transition-colors"
-                    placeholder="e.g. 9840123456"
+                    placeholder="Enter contact number"
                     {...register('phone', { required: 'Phone is required' })}
                   />
                   {errors.phone && <span className="text-[9px] text-red-500">{errors.phone.message}</span>}
@@ -245,7 +245,7 @@ const ManageDoctors = () => {
                   <input
                     type="text"
                     className="w-full bg-white/50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-xl py-2.5 px-4 text-xs focus:outline-none focus:border-rosegold-400 transition-colors"
-                    placeholder="e.g. General Surgery"
+                    placeholder="Enter medical specialization"
                     {...register('specialization', { required: 'Specialization is required' })}
                   />
                   {errors.specialization && <span className="text-[9px] text-red-500">{errors.specialization.message}</span>}

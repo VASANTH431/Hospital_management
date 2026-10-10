@@ -431,7 +431,7 @@ const DoctorDashboard = () => {
                       <input
                         type="text"
                         className="w-full bg-white/50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-xl py-2 px-3 text-xs focus:outline-none focus:border-rosegold-400"
-                        placeholder="e.g. Kavya Vasanth"
+                        placeholder="Enter patient full name"
                         {...register('name', { required: 'Name is required' })}
                       />
                       {errors.name && <span className="text-[9px] text-red-500">{errors.name.message}</span>}
@@ -442,7 +442,7 @@ const DoctorDashboard = () => {
                       <input
                         type="number"
                         className="w-full bg-white/50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-xl py-2 px-3 text-xs focus:outline-none focus:border-rosegold-400"
-                        placeholder="e.g. 28"
+                        placeholder="Enter age"
                         {...register('age', { required: 'Age is required' })}
                       />
                       {errors.age && <span className="text-[9px] text-red-500">{errors.age.message}</span>}
@@ -488,7 +488,7 @@ const DoctorDashboard = () => {
                       <input
                         type="text"
                         className="w-full bg-white/50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-xl py-2 px-3 text-xs focus:outline-none focus:border-rosegold-400"
-                        placeholder="e.g. 9840123456"
+                        placeholder="Enter emergency contact number"
                         {...register('emergencyContact', { required: 'Emergency Contact is required' })}
                       />
                       {errors.emergencyContact && <span className="text-[9px] text-red-500">{errors.emergencyContact.message}</span>}
@@ -505,7 +505,7 @@ const DoctorDashboard = () => {
                       <input
                         type="text"
                         className="w-full bg-white/50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-xl py-2 px-3 text-xs focus:outline-none focus:border-rosegold-400"
-                        placeholder="e.g. Acute Appendicitis"
+                        placeholder="Enter primary disease / condition"
                         {...register('disease', { required: 'Disease is required' })}
                       />
                       {errors.disease && <span className="text-[9px] text-red-500">{errors.disease.message}</span>}
@@ -516,7 +516,7 @@ const DoctorDashboard = () => {
                       <input
                         type="text"
                         className="w-full bg-white/50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-xl py-2 px-3 text-xs focus:outline-none focus:border-rosegold-400"
-                        placeholder="e.g. Penicillin, Peanuts (or 'None')"
+                        placeholder="Enter known allergies (or 'None')"
                         {...register('allergies')}
                       />
                     </div>
@@ -527,7 +527,7 @@ const DoctorDashboard = () => {
                     <textarea
                       rows={2}
                       className="w-full bg-white/50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-xl py-2 px-3 text-xs focus:outline-none focus:border-rosegold-400"
-                      placeholder="Enter detailed clinical diagnostics findings..."
+                      placeholder="Enter clinical diagnosis details..."
                       {...register('diagnosis', { required: 'Diagnosis is required' })}
                     />
                     {errors.diagnosis && <span className="text-[9px] text-red-500">{errors.diagnosis.message}</span>}
@@ -611,7 +611,7 @@ const DoctorDashboard = () => {
                       <textarea
                         rows={2}
                         className="w-full bg-white/50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-xl py-2 px-3 text-xs focus:outline-none focus:border-rosegold-400"
-                        placeholder="e.g. Paracetamol 650mg TDS, Amoxicillin 500mg BD for 5 days..."
+                        placeholder="Enter medicine prescription plan..."
                         {...register('medicinePlan', { required: 'Medicine plan is required' })}
                       />
                       {errors.medicinePlan && <span className="text-[9px] text-red-500">{errors.medicinePlan.message}</span>}
@@ -622,7 +622,7 @@ const DoctorDashboard = () => {
                       <textarea
                         rows={2}
                         className="w-full bg-white/50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-xl py-2 px-3 text-xs focus:outline-none focus:border-rosegold-400"
-                        placeholder="e.g. Low sodium liquid diet, soft solid foods in evening..."
+                        placeholder="Enter nutrition & food schedule..."
                         {...register('foodPlan', { required: 'Food plan is required' })}
                       />
                       {errors.foodPlan && <span className="text-[9px] text-red-500">{errors.foodPlan.message}</span>}
@@ -634,7 +634,7 @@ const DoctorDashboard = () => {
                     <textarea
                       rows={2}
                       className="w-full bg-white/50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-xl py-2 px-3 text-xs focus:outline-none focus:border-rosegold-400"
-                      placeholder="e.g. Bed rest, check vitals every 4 hours..."
+                      placeholder="Enter special clinical instructions..."
                       {...register('specialInstructions')}
                     />
                   </div>

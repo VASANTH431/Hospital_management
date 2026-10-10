@@ -66,7 +66,7 @@ const SurgeryModal = ({ patient, doctorId, onClose, onBook, surgeryToEdit }) => 
                                 <input
                                     type="text"
                                     className="w-full bg-white/50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-xl py-2 px-3 text-xs"
-                                    placeholder="e.g. Appendectomy"
+                                    placeholder="Enter surgery procedure name"
                                     {...register('surgeryName', { required: 'Required' })}
                                 />
                             </div>
@@ -99,7 +99,7 @@ const SurgeryModal = ({ patient, doctorId, onClose, onBook, surgeryToEdit }) => 
                                 <input
                                     type="number"
                                     className="w-full bg-white/50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-xl py-2 px-3 text-xs"
-                                    placeholder="e.g. 150000"
+                                    placeholder="Enter estimated procedure amount"
                                     {...register('estimatedAmount', { required: 'Required' })}
                                 />
                             </div>

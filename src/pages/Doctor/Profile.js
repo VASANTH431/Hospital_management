@@ -99,7 +99,7 @@ const Profile = () => {
                   <input
                     type="text"
                     className="w-full bg-white/50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-xl py-3 pl-10 pr-4 focus:outline-none focus:border-rosegold-400"
-                    placeholder="e.g. Dr. Kavya Vasanth"
+                    placeholder="Enter physician full name"
                     {...register('name', { required: 'Name is required' })}
                   />
                 </div>
@@ -113,7 +113,7 @@ const Profile = () => {
                   <input
                     type="email"
                     className="w-full bg-white/50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-xl py-3 pl-10 pr-4 focus:outline-none focus:border-rosegold-400"
-                    placeholder="kavya@vkhospital.com"
+                    placeholder="Enter contact email"
                     {...register('email', { required: 'Email is required' })}
                   />
                 </div>
@@ -127,7 +127,7 @@ const Profile = () => {
                   <input
                     type="text"
                     className="w-full bg-white/50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-xl py-3 pl-10 pr-4 focus:outline-none focus:border-rosegold-400"
-                    placeholder="e.g. 9840123456"
+                    placeholder="Enter phone number"
                     {...register('phone', { required: 'Phone is required' })}
                   />
                 </div>

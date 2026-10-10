@@ -188,7 +188,7 @@ const Login = () => {
                     <input
                       type="text"
                       className="w-full bg-white/50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-xl py-2.5 pl-10 pr-4 text-sm focus:outline-none focus:border-rosegold-400 transition-colors"
-                      placeholder="e.g. DOC101"
+                      placeholder="Enter doctor ID"
                       {...register('doctorId', { required: 'Doctor ID is required' })}
                     />
                   </div>
@@ -202,7 +202,7 @@ const Login = () => {
                     <input
                       type="password"
                       className="w-full bg-white/50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-xl py-2.5 pl-10 pr-4 text-sm focus:outline-none focus:border-rosegold-400 transition-colors"
-                      placeholder="••••••••"
+                      placeholder="Enter password"
                       {...register('password', { required: 'Password is required' })}
                     />
                   </div>
@@ -219,7 +219,7 @@ const Login = () => {
                   <input
                     type="text"
                     className="w-full bg-white/50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-xl py-2.5 pl-10 pr-4 text-sm focus:outline-none focus:border-rosegold-400 transition-colors"
-                    placeholder="e.g. PAT49204"
+                    placeholder="Enter patient ID"
                     {...register('patientId', { required: 'Patient ID is required' })}
                   />
                 </div>
