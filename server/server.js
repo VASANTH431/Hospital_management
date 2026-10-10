@@ -62,10 +62,23 @@ app.use('/api/patients', patientRoutes);
 app.use('/api/surgeries', surgeryRoutes);
 app.use('/api/ai', aiRoutes);
 
-// Base Endpoint
-app.get('/', (req, res) => {
-  res.json({ message: 'VK Hospital Management API is running...' });
-});
+const path = require('path');
+
+// Base / Static Endpoints
+const buildPath = path.join(__dirname, '../build');
+if (require('fs').existsSync(buildPath)) {
+  app.use(express.static(buildPath));
+  app.get('*', (req, res, next) => {
+    if (req.originalUrl.startsWith('/api')) {
+      return next();
+    }
+    res.sendFile(path.join(buildPath, 'index.html'));
+  });
+} else {
+  app.get('/', (req, res) => {
+    res.json({ message: 'VK Hospital Management API is running...' });
+  });
+}
 
 // Custom 404 handler
 app.use((req, res, next) => {
